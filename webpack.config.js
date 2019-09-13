@@ -1,22 +1,23 @@
 const path = require('path');
-new UglifyJsPlugin(),
-new CleanWebpackPlugin(['dist']),
-new HtmlWebpackPlugin = require('html-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 module.exports = {
-   mode: 'development',
   entry: './src/main.js',
   output: {
     filename: 'bundle.js',
     path: path.resolve(__dirname, 'dist')
   },
-  devtool: 'eval-source-map',
-  devServer: {
-  contentBase: './dist'
+  devtool: 'eval-source-map',  // new line
+  devServer: {                 // new line
+    contentBase: './dist'      // new line
   },
   plugins: [
+    new UglifyJsPlugin({ sourceMap: true }),
+    new CleanWebpackPlugin(['dist']),
     new HtmlWebpackPlugin({
-      title: 'triageApp',
+      title: 'Ping Pong',
       template: './src/index.html',
       inject: 'body'
     })
@@ -29,6 +30,23 @@ module.exports = {
           'style-loader',
           'css-loader'
         ]
+      },
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        loader: "eslint-loader"
+      },
+      // new rule
+      {
+        test: /\.js$/,
+        exclude: [
+          /node_modules/,
+          /spec/
+        ],
+        loader: "babel-loader",
+        options: {
+          presets: ['es2015']
+        }
       }
     ]
   }
