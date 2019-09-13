@@ -1,4 +1,5 @@
 const path = require('path');
+new UglifyJsPlugin(),
 new CleanWebpackPlugin(['dist']),
 new HtmlWebpackPlugin = require('html-webpack-plugin');
 
